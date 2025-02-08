@@ -7,6 +7,7 @@ use app\controllers\LoginController;
 use app\controllers\PostsUserController;
 use app\controllers\ProfileController;
 use app\controllers\PostController;
+use app\controllers\ResetPasswordController;
 use app\controllers\SettingsController;
 use Slim\Exception\HttpNotFoundException;
 use app\database\ConnectionRedis;
@@ -16,6 +17,7 @@ use app\database\ConnectionSQL;
 
 $app->get('/', [HomeController::class, 'index']);
 $app->get('/contact', [ContactController::class, 'contact']);
+$app->map(['GET', 'POST'],'/password-reset', [ResetPasswordController::class, 'index']);
 $app->map(['GET', 'POST'], '/settings', [SettingsController::class, 'settings']);
 $app->map(['GET', 'POST'], '/login', [LoginController::class, 'login']);
 $app->map(['GET', 'POST'], '/signup', [CreateAccController::class, 'create']);

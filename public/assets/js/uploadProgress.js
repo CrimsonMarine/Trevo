@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const progressMessage = document.querySelector('.progress-bar-message');
     const nameFile = document.getElementById('nameFile');
     
-    // Improved file selection handling
     videoInput.addEventListener('change', function() {
         const file = this.files[0];
         if (file) {
@@ -14,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // File validation
     function validateVideoFile(file) {
         const maxSize = 250000000;
         const validTypes = ['video/mp4', 'video/quicktime', 'video/x-msvideo'];
@@ -36,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return true;
     }
 
-    // Improved form submission with better error handling
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
         
@@ -57,7 +54,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Improved upload function with better progress tracking
     async function uploadVideo(formData) {
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();

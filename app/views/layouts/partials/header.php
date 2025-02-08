@@ -2,6 +2,19 @@
     document.addEventListener('DOMContentLoaded', function() {
         let currentStatus = 'offline';
         const selectElement = document.querySelector('select[name="status"]');
+        selectElement.addEventListener('click', () => {
+            if (selectElement.classList.contains('clicked')) {
+                selectElement.classList.remove('clicked');
+            } else {
+                selectElement.classList.add('clicked');
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!selectElement.contains(e.target)) {
+                selectElement.classList.remove('clicked');
+            }
+        });
         if (document.body.contains(selectElement)) {
             
             function updateActivity() {

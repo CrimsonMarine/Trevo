@@ -105,7 +105,6 @@
         background: linear-gradient(to top, rgba(177, 177, 177, 0), <?= $userCustomization['pear_elementColor2']?>);
         border-radius: 3px;
         padding: 5px;
-        filter: contrast(110%) brightness(1.2);
     }
 
     

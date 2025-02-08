@@ -15,8 +15,7 @@
             "bin\\": "bin/"
         },
         "files": [
-            "app/helpers/helpers.php",
-            "app/helpers/mailer.php"
+            "app/helpers/helpers.php"
         ]
     },
     "authors": [
