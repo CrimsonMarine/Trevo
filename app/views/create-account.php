@@ -5,8 +5,9 @@
 
 <div class="sub-container">
     <div class="pag-liner">
-        <h3>Não possui uma conta?</h3>
+        <h3 class="marginV-none">Não possui uma conta?</h3>
         <h4>Certifique-se de ler as <a href="#">Política de Privacidade</a> e <a href="#">Termos de Uso.</a></h4>
+        <script src="assets/js/dropdownElement.js"></script>
         <div class="pear-box-1">
             <form class="ins-padd1" method="post" action="">
                 <div>
@@ -48,7 +49,7 @@
     </div>
     <div class="pag-liner">
         <div class="margin-to-right">
-            <p>Já possue uma conta? <a href="/login">Entrar.</a></p>
+            <p class="marginV-none">Já possue uma conta? <a href="/login">Entrar.</a></p>
             <h4>
             Por que criar uma conta?
             </h4>

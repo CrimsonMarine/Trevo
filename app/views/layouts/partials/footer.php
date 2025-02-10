@@ -10,7 +10,7 @@
         </div>
         <div class="footer-wrapper-1">
             <a href="/"><div class="logo-footer"></div></a>
-            <div class="footer-wrapper-1-sub1 flexCom flexo">
+            <div class="footer-wrapper-1-sub1 flexCom flexo back-2 ins-padd3">
                 <nav>
                 <?php 
                     if ($_SESSION['type-user'] == 'user') {

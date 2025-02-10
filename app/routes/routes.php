@@ -1,4 +1,6 @@
 <?php
+
+use app\controllers\AccRecoverController;
 use app\controllers\HomeController;
 use app\controllers\ContactController;
 use app\controllers\CreateAccController;
@@ -17,6 +19,7 @@ use app\database\ConnectionSQL;
 
 $app->get('/', [HomeController::class, 'index']);
 $app->get('/contact', [ContactController::class, 'contact']);
+$app->map(['GET', 'POST'], '/account-recover', [AccRecoverController::class, 'recover']);
 $app->map(['GET', 'POST'],'/password-reset', [ResetPasswordController::class, 'index']);
 $app->map(['GET', 'POST'], '/settings', [SettingsController::class, 'settings']);
 $app->map(['GET', 'POST'], '/login', [LoginController::class, 'login']);

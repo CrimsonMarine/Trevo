@@ -5,37 +5,45 @@ namespace app\classes;
 use app\database\ConnectionSQL;
 
 class User {
-    public array $user;
-    public array $userCustomization;
+    public array $user = [];
+    public array $userCustomization = [];
     private $pdo;
 
     public function __construct() {
         $this->pdo = ConnectionSQL::connect();
-        
-        $this->user = $this->DatabaseUser();
+    }
 
-        if (!$this->user) {
+    public function DatabaseUser(string $column, string $value): ?array {
+        $validColumns = ['username', 'id', 'user_url', 'birthday', 'profile_picture', 'created_at', 'country'];
+        
+        if (!in_array($column, $validColumns)) {
+            throw new \Exception("Coluna inválida para busca");
+        }
+
+        $stmt = $this->pdo->prepare("SELECT username, id, user_url, birthday, profile_picture, created_at, country FROM users WHERE $column = :value");
+        $stmt->execute(['value' => $value]);
+        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+        
+        if (!$user) {
             throw new \Exception("Usuário não encontrado");
         }
 
-        $this->userCustomization = $this->DatabaseUserCustomization();
-    }
-
-    private function DatabaseUser(): ?array {
-        $userId = $_SESSION['user-info']['userId'] ?? null;
-
-        if (!$userId) {
-            return null;
+        if ($user['profile_picture'] === null || $user['profile_picture'] == '') {
+            $user['profile_picture'] = '/assets/img/defaultp.png';
         }
 
-        $stmt = $this->pdo->prepare("SELECT username, id, user_url FROM users WHERE id = :userId");
-        $stmt->execute(['userId' => $userId]);
-        return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
+        $this->user = $user;
+
+        return $user;
     }
 
-    private function DatabaseUserCustomization(): ?array {
-        $stmtCustomization = $this->pdo->prepare("SELECT usern_color FROM custom_user WHERE UserId = :UserId");
-        $stmtCustomization->execute(['UserId' => $this->user['id']]);
-        return $stmtCustomization->fetch(\PDO::FETCH_ASSOC) ?: null;
+    public function DatabaseUserCustomization(): ?array {
+        if (empty($this->user['id'])) {
+            throw new \Exception("ID do usuário não definido");
+        }
+
+        $stmt = $this->pdo->prepare("SELECT usern_color, pear_elementColor1, pear_elementColor2, backgroundImage, pfpBorder, pfpBorderRadius FROM custom_user WHERE UserId = :UserId");
+        $stmt->execute(['UserId' => $this->user['id']]);
+        return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
     }
 }

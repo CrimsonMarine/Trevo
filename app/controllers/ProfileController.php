@@ -3,48 +3,51 @@ namespace app\controllers;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use app\classes\User;
 use app\database\ConnectionSQL;
 use app\database\ConnectionRedis;
 
 class ProfileController {
     public function profile(Request $request, Response $response, array $args) {
         $userUrl = $args['userUrl'];
+        $currentUserId = $_SESSION['user-info']['userId'] ?? '';
 
-        $currentUserId = '';
+        $userInstance = new User();
+        $user = $userInstance->DatabaseUser('user_url', $userUrl);
 
-        if (isset($_SESSION['user-info'])) {
-            $currentUserId = $_SESSION['user-info']['userId'];
+        if (!$user) {
+            return $response->withHeader('Location', '/not-found')->withStatus(404);
         }
+
+        $userCustomization = $userInstance->DatabaseUserCustomization();
+
         $pdo = ConnectionSQL::connect();
-        $stmt = $pdo->prepare("SELECT username, id, user_url FROM users WHERE user_url = :user_url");
-        $stmt->execute(['user_url' => $userUrl]);
-        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        $stmtCustomization = $pdo->prepare("SELECT usern_color, pear_elementColor1, pear_elementColor2 FROM custom_user WHERE UserId = :UserId");
-        $stmtCustomization->execute(['UserId' => $user['id']]);
-        $userCustomization = $stmtCustomization->fetch(\PDO::FETCH_ASSOC);
-
-        $stmtPosts = $pdo->prepare("SELECT title, content, date, idAuthor, id, post_url FROM posts WHERE idAuthor = :idAuthor ORDER BY date DESC LIMIT 3");
+        $stmtPosts = $pdo->prepare("SELECT title, content, date, idAuthor, id, post_url 
+                                    FROM posts 
+                                    WHERE idAuthor = :idAuthor 
+                                    ORDER BY date DESC LIMIT 3");
         $stmtPosts->execute(['idAuthor' => $user['id']]);
-        
         $posts = $stmtPosts->fetchAll(\PDO::FETCH_ASSOC);
 
         $status = ConnectionRedis::getData('users', $user['id'], 'status');
-        $actLast = implode(ConnectionRedis::getData('users', $user['id'], 'last_activity'));
+        $lastActivity = ConnectionRedis::getData('users', $user['id'], 'last_activity');
+        $lastActivityFormatted = is_array($lastActivity) ? implode('', $lastActivity) : $lastActivity;
 
-        $stmtFollow = $pdo->prepare("SELECT COUNT(*) FROM followers WHERE follower_id = :follower AND following_id = :following");
+        $stmtFollow = $pdo->prepare("SELECT COUNT(*) FROM followers 
+                                     WHERE follower_id = :follower 
+                                     AND following_id = :following");
         $stmtFollow->execute([
             'follower' => $currentUserId,
             'following' => $user['id']
         ]);
-
         $following = $stmtFollow->fetchColumn() > 0;
 
         view('profile', [
             'username' => $user['username'], 
             'title' => $user['username'], 
-            'status' => implode(':', $status), 
-            'lastActivity' => $actLast, 
+            'status' => is_array($status) ? implode(':', $status) : $status,
+            'lastActivity' => $lastActivityFormatted, 
             'posts' => $posts,
             'userId' => $user['id'],
             'userUrl' => $user['user_url'],

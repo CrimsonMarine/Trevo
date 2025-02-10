@@ -52,14 +52,16 @@ class CreateAccController
                                 'password' => $hashedPassword,
                             ]);
 
-                            $queryCustomization = "INSERT INTO custom_user (id, UserId, usern_color, pear_elementColor1, pear_elementColor2) VALUES (:id, :UserId, :usern_color, :pear_elementColor1, :pear_elementColor2)";
+                            $queryCustomization = "INSERT INTO custom_user (id, UserId, usern_color, pear_elementColor1, pear_elementColor2, pfpBorder, pfpBorderRadius) VALUES (:id, :UserId, :usern_color, :pear_elementColor1, :pear_elementColor2, :pfpBorder, :pfpBorderRadius)";
                             $stmtCustomization = $pdo->prepare($queryCustomization);
                             $stmtCustomization->execute([
                                 'id' => generateRandomString(11),
                                 'UserId' => $userId,
                                 'usern_color' => '#4f4f4f',
                                 'pear_elementColor1' => '#dedede',
-                                'pear_elementColor2' => '#ffffff'
+                                'pear_elementColor2' => '#ffffff',
+                                'pfpBorder' => '#858585',
+                                'pfpBorderRadius' => '6px'
                             ]);
     
                             $message = "Registro Concluído.";

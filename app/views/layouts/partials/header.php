@@ -2,97 +2,98 @@
     document.addEventListener('DOMContentLoaded', function() {
         let currentStatus = 'offline';
         const selectElement = document.querySelector('select[name="status"]');
-        selectElement.addEventListener('click', () => {
-            if (selectElement.classList.contains('clicked')) {
-                selectElement.classList.remove('clicked');
-            } else {
-                selectElement.classList.add('clicked');
-            }
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!selectElement.contains(e.target)) {
-                selectElement.classList.remove('clicked');
-            }
-        });
         if (document.body.contains(selectElement)) {
-            
-            function updateActivity() {
-                fetch('/update-activity', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        userId: '<?php echo htmlspecialchars($_SESSION['user-info']['userId'] ?? '', ENT_QUOTES, 'UTF-8'); ?>'
-                    })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.text().then(text => { throw new Error(text); });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Activity updated:', data);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            }
-
-            selectElement.addEventListener('change', function(event) {
-                const status = event.target.value;
-                const userId = '<?php echo htmlspecialchars($_SESSION['user-info']['userId'] ?? '', ENT_QUOTES, 'UTF-8'); ?>';
-                
-                const formData = new FormData();
-                formData.append('status', status);
-                formData.append('userId', userId);
-                
-                let statusColor;
-
-                switch (status) {
-                    case 'online':
-                        statusColor = 'green';
-                        break;
-                    case 'offline':
-                        statusColor = 'gray';
-                        break;
-                    case 'absent':
-                        statusColor = '#f09000';
-                        break;
-                }
-
-                selectElement.style.color = statusColor;
-
-                fetch('/update-status', {
-                    method: 'POST',
-                    body: formData,
-                }).then(() => {
-                    currentStatus = status;
-
-                    if (status !== 'offline') {
-                        startActivityUpdates();
-                    } else {
-                        stopActivityUpdates();
-                    }
-                });
-            });
-            let activityInterval;
-            function startActivityUpdates() {
-                if (!activityInterval) {
-                    activityInterval = setInterval(updateActivity, 220000);
-                }
-            }
-
-            function stopActivityUpdates() {
-                if (activityInterval) {
-                    clearInterval(activityInterval);
-                    activityInterval = null;
-                }
-            }
-
             window.onload = function() {
+                selectElement.addEventListener('click', () => {
+                    if (selectElement.classList.contains('clicked')) {
+                        selectElement.classList.remove('clicked');
+                    } else {
+                        selectElement.classList.add('clicked');
+                    }
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!selectElement.contains(e.target)) {
+                        selectElement.classList.remove('clicked');
+                    }
+                });
+                
+                function updateActivity() {
+                    fetch('/update-activity', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            userId: '<?php echo htmlspecialchars($_SESSION['user-info']['userId'] ?? '', ENT_QUOTES, 'UTF-8'); ?>'
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.text().then(text => { throw new Error(text); });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Activity updated:', data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                }
+
+                selectElement.addEventListener('change', function(event) {
+                    const status = event.target.value;
+                    const userId = '<?php echo htmlspecialchars($_SESSION['user-info']['userId'] ?? '', ENT_QUOTES, 'UTF-8'); ?>';
+                    
+                    const formData = new FormData();
+                    formData.append('status', status);
+                    formData.append('userId', userId);
+                    
+                    let statusColor;
+
+                    switch (status) {
+                        case 'online':
+                            statusColor = 'green';
+                            break;
+                        case 'offline':
+                            statusColor = 'gray';
+                            break;
+                        case 'absent':
+                            statusColor = '#f09000';
+                            break;
+                    }
+
+                    selectElement.style.color = statusColor;
+
+                    fetch('/update-status', {
+                        method: 'POST',
+                        body: formData,
+                    }).then(() => {
+                        currentStatus = status;
+
+                        if (status !== 'offline') {
+                            startActivityUpdates();
+                        } else {
+                            stopActivityUpdates();
+                        }
+                    });
+                });
+                let activityInterval;
+                function startActivityUpdates() {
+                    if (!activityInterval) {
+                        activityInterval = setInterval(updateActivity, 220000);
+                    }
+                }
+
+                function stopActivityUpdates() {
+                    if (activityInterval) {
+                        clearInterval(activityInterval);
+                        activityInterval = null;
+                    }
+                }
+
+            
                 currentStatus = selectElement.value;
 
                 let initialColor;
@@ -115,13 +116,14 @@
                 } else {
                     stopActivityUpdates();
                 }
-            }
+            
 
-            setInterval(() => {
-                if (currentStatus !== 'offline') {
-                    updateStatus('offline', '<?php echo htmlspecialchars($_SESSION['user-info']['userId'] ?? '', ENT_QUOTES, 'UTF-8'); ?>');
-                }
-            }, 520000);
+                setInterval(() => {
+                    if (currentStatus !== 'offline') {
+                        updateStatus('offline', '<?php echo htmlspecialchars($_SESSION['user-info']['userId'] ?? '', ENT_QUOTES, 'UTF-8'); ?>');
+                    }
+                }, 320000);
+            }
         }
     })
 </script>
@@ -210,7 +212,7 @@
             <div class="header-bovecenter">
                 <nav class="ile-selectrk flexoNoN">
                     <?php ?>
-                    <a class="ile-a flexoNoN" href="#">Meus Videos</a>
+                    <a class="ile-a flexoNoN" href="#"><span class="Tex">Meus Videos</span></a>
                     <a class="ile-a flexoNoN" href=<?php
                     if (isset($_SESSION['user-info']['userId'])) {
                         $loggedIdUrl = htmlspecialchars($_SESSION['user-info']['user_url'] ?? '', ENT_QUOTES, 'UTF-8');
@@ -218,7 +220,7 @@
                     } else {
                         echo "/";
                     }
-                    ?>>Minhas Postagens</a>
+                    ?>><span class="Tex">Minhas Postagens</span></a>
                     <a class="ile-a flexoNoN" href=<?php 
                     if (isset($_SESSION['user-info']['userId'])) {
                         $loggedIdUrl = htmlspecialchars($_SESSION['user-info']['user_url'] ?? '', ENT_QUOTES, 'UTF-8');
@@ -226,7 +228,7 @@
                     } else {
                         echo "/";
                     }
-                    ?>>Meu Perfil</a>
+                    ?>><span class="Tex">Meu Perfil</span></a>
                 </nav>
             </div>
             <div class="header-right flexo">

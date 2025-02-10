@@ -68,15 +68,20 @@
     }
 </script>
 <style>
+    .profileImg {
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid <?= $userCustomization['pfpBorder']?>;
+        border-radius: <?= $userCustomization['pfpBorderRadius']?>;
+    }
     .sub-p1 {
-        width: 65%;
-        flex-grow: 4;
+        width: 100%;
         height: fit-content;
     }
 
     .sub-p2 {
-        width: 35%;
-        flex-grow: 1;
+        width: 500px;
     }
 
     .prof-container {
@@ -91,7 +96,6 @@
 
     .pear-box-2-prf {
         font-family: Arial, Helvetica, sans-serif;
-        width: fit-content;
         border: 1px solid <?= $userCustomization['pear_elementColor1']?>;
         box-sizing: border-box;
         background: linear-gradient(to bottom, <?= $userCustomization['pear_elementColor2']?>, <?= $userCustomization['pear_elementColor1']?>);
@@ -108,7 +112,7 @@
     }
 
     
-    @media all and (max-width:910px) {
+    @media all and (max-width:964px) {
         .prof-container {
             flex-direction: column; 
         }
@@ -121,64 +125,75 @@
     }
 </style>
 
-<div class='flexo prof-container' style='gap: 10px;'>
+<div class='flexo prof-container' style='gap: 10px; width: 100%;'>
     <div class='font-left pear-box-2-prf sub-p1'>
         <div class='back-1'>
-            <div class='ins-padd1 flexo flexCom'>
-                <div class='flexCom' style='gap: 5px;'>
-                    <div class='flexoNoN flexRow' style='height:100%;'>
-                        <b class='font-large' style="color: <?= $userCustomization['usern_color']?>"><?php echo $this->e($username)?></b>
-                        <div class='margin-to-right'>
-                        <?php
-                            if (isset($currentUserId)) {
-                                if ($currentUserId != $userId) {
-                                    echo "
-                                        <div class='flw-button-wrapper flexo flexRow' id='FollowButton' style='height:23px; width: 100%;'>
-                                            <button class='follow-button' id='followButton' data-user-id='{$user['id']}'>
-                                                " . ($following ? 'Deixar de seguir' : 'Seguir') . "
-                                            </button>
-                                            <div class='flwStatus'>
-                                                <div id='actFollow' class=" . ($following ? 'gminus' : 'gplus') . "></div>
-                                            </div>
-                                        </div>
-                                    ";
-                                }
-                            }
-                        ?>
-                        </div>
+            <div class="ins-padd1 flexo flexCom">
+                <div class='flexo flexRow' style="height: 74px;">
+                    <div class='flexCom flexo' style="width: 70px; margin-right: 10px;">
+                        <img src="<?= $user['profile_picture']?>" class="profileImg"></img>
                     </div>
-                    <?php 
-                    $color;
-                    $IconDegree;
-                    switch ($status) {
-                        case 'online':
-                            $color = 'green';
-                            $status = 'Online';
-                            $IconDegree = 'hue-rotate(-10deg) brightness(150%)';
-                            break;
-                        case 'offline':
-                            $color = 'gray';
-                            $status = 'Offline';
-                            $IconDegree = 'saturate(0%) brightness(150%)';
-                            break;
-                        case 'absent':
-                            $color = '#f09000';
-                            $status = 'Ausente';
-                            $IconDegree = 'hue-rotate(260deg) brightness(150%)';
-                            break;
-                    }
-                    ?>
-                    <div >
-                        <div class='flexoNoN' style='padding: 5px 5px 5px 0; height: 50%; gap: 5px;'>
-                            <div class='little-box1 flexoNoN flexRow'>
-                                <div class='StatusIcon flexoNoN' style='filter: <?php echo $IconDegree?>;'></div><b style='color: <?php echo $color?>;'><?php echo $this->e($status)?></b>
-                                <em class="LastAc-InProfile">Ultima Atividade: <?php echo $this->e($lastActivity)?></em>
+                    <div class='flexCom flexo'>
+                        <div class='flexo flexRow'>
+                            <b class='font-large' style="color: <?= $userCustomization['usern_color']?>"><?php echo $this->e($username)?></b>
+                            <div>
                             </div>
                         </div>
+                        <?php 
+                        $color;
+                        $IconDegree;
+                        switch ($status) {
+                            case 'online':
+                                $color = 'green';
+                                $status = 'Online';
+                                $IconDegree = 'hue-rotate(-10deg) brightness(150%)';
+                                break;
+                            case 'offline':
+                                $color = 'gray';
+                                $status = 'Offline';
+                                $IconDegree = 'saturate(0%) brightness(150%)';
+                                break;
+                            case 'absent':
+                                $color = '#f09000';
+                                $status = 'Ausente';
+                                $IconDegree = 'hue-rotate(260deg) brightness(150%)';
+                                break;
+                        }
+                        ?>
+                        <em class="marginV-50">Ultima Atividade: <?php echo $this->e($lastActivity)?></em>
+                        <div class="margin-to-bottom">
+                            <div class='flexo' style='height: 25px; gap: 5px;'>
+                                <div class='little-box1 flexoNoN flexRow'>
+                                    <div class='StatusIcon flexoNoN' style='filter: <?php echo $IconDegree?>;'></div><b style='color: <?php echo $color?>;'><?php echo $this->e($status)?></b>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
-                    <hr>
+                    <div style="max-width: 100%" class="margin-to-right">
+                        <div style="width: fit-content;" class=' flexCom flexo'>   
+                            <?php
+                                if (isset($currentUserId)) {
+                                    if ($currentUserId != $userId) {
+                                        echo "
+                                            <div class='flw-button-wrapper flexo flexRow' id='FollowButton' style='height:23px;'>
+                                                <button class='follow-button' id='followButton' data-user-id='{$user['id']}'>
+                                                    " . ($following ? 'Deixar de seguir' : 'Seguir') . "
+                                                </button>
+                                                <div class='flwStatus'>
+                                                    <div id='actFollow' class=" . ($following ? 'gminus' : 'gplus') . "></div>
+                                                </div>
+                                            </div>
+                                        ";
+                                    }
+                                }
+                            ?>
+                        </div>
+                    </div>
                 </div>
             </div>
+            
         </div>
     </div>
     <div class='flexCom flexo font-left pear-box-2-prf sub-p2'>
@@ -189,18 +204,23 @@
                     <span class='font-large margin-to-right'><a href='/user/<?php echo $userUrl?>/posts'><span>(<?php echo count($posts)?>)</span></a></span>
                 </div>
                 <?php if (!empty($posts)): ?>
-                <?php foreach ($posts as $post): ?>
-                    <div class='post-container1' onclick="window.location.href='/post/<?= htmlspecialchars($post['post_url']) ?>'">
-                        <div class='postProfile flexo flexCom'>
-                            <b class='font-large'><?php echo $this->e($post['title']) ?></b>
-                            <p><?php echo $this->e($post['content']) ?></p>
-                            <div class='flexRow flexoNoN' style='margin: 5px 0 5px 0'>
-                                <b>Publicado em: <?php echo $this->e(date('Y/m/d', strtotime($post['date']))) ?></b>
-                                <?php $this->insert('layouts/otherPostsElements1', ['post' => $post])?>
+                    <?php foreach ($posts as $post): ?>
+                        <div class="post-container1">
+                            <div class="postProfile flexCom flexo " onclick="window.location.href='/post/<?= htmlspecialchars($post['post_url']) ?>'">
+                                <?php if ($post['title'] != ''):?>
+                                    <b class="font-large titlePost"><?php echo $this->e($post['title']) ?></b>
+                                <?php endif?>
+                                <p><?= htmlspecialchars($post['content']) ?></p>
+                            </div>
+                            <div class="flexo flexCom">
+                                
+                                <div class="flexRow flexoNoN" style="margin: 5px 0 5px 0">
+                                    <b>Publicado em: <?= date('Y/m/d', strtotime($post['date'])) ?></b>
+                                    <?php $this->insert('layouts/otherPostsElements1', ['post' => $post]) ?>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
             <?php else: ?>
                 <p style='font-weight: bold;'>Esse usuário não possue postagens.</p>
             <?php endif; ?>

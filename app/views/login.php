@@ -6,8 +6,8 @@
 <div class="sub-container">
     <div class="pag-liner">
         <div class="margin-to-left">
-            <h3>Já possui uma conta?</h3>
-            <h4><a href="#">Não consigo acessar minha conta.</a></h4>
+            <h3 class="marginV-none">Já possui uma conta?</h3>
+            <h4><a href="/account-recover">Não consigo acessar minha conta.</a></h4>
             <div class="pear-box-1">
                 <form class="ins-padd1" method="post" action="">
                     <div>
@@ -29,7 +29,7 @@
     </div>
     <div class="pag-liner">
         <div class="margin-to-right">
-            <h4>Certifique-se de ler as <a href="#">Política de Privacidade</a> e <a href="#">Termos de Uso.</a></h4>
+            <h4 class="marginV-none">Certifique-se de ler as <a href="#">Política de Privacidade</a> e <a href="#">Termos de Uso.</a></h4>
             <p>Não possue uma conta? <a href="/signup">Cadastre-Se.</a></p>
             <h4>
             Por que criar uma conta?
